@@ -1,0 +1,6 @@
+Build
+*.txt
+.vscode
+*.png
+*.gv
+Differ
