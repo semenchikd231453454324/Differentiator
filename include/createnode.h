@@ -12,6 +12,9 @@ CreateNode(Operation, Operat, Left, Right)
 #define CreateVar(Var)                      \
 CreateNode(Variable, Var, nullptr, nullptr)
 
+#define CreateMagicNum(MagicNum)                      \
+CreateNode(MagicNums, MagicNum, nullptr, nullptr)
+
 NodeStruct* CreateNode(int type, int value, NodeStruct* Left, NodeStruct* Right);
 
 NodeStruct* CopyNode(NodeStruct* node);

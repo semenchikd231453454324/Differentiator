@@ -4,8 +4,8 @@ src_prefix=src/
 build_prefix=Build/
 #putsubstr
 
-HUI = $(addprefix ${src_prefix}, main.cpp  graphicdump.cpp read.cpp createnode.cpp nodegets.cpp Differentiator.cpp)
-OBJ = $(addprefix ${build_prefix}, main.o graphicdump.o read.o createnode.o nodegets.o Differentiator.o)
+HUI = $(addprefix ${src_prefix}, main.cpp  graphicdump.cpp read.cpp createnode.cpp nodegets.cpp Differentiator.cpp optimization.cpp)
+OBJ = $(addprefix ${build_prefix}, main.o graphicdump.o read.o createnode.o nodegets.o Differentiator.o optimization.o)
 
 
 all : $(EXE_NAME)

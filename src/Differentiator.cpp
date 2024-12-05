@@ -7,6 +7,7 @@
 
 #include "difer.h"
 #include "createnode.h"
+#include "graphicdump.h"
 
 NodeStruct* Differentiator(NodeStruct* node)
 {
@@ -16,7 +17,7 @@ NodeStruct* Differentiator(NodeStruct* node)
         return nullptr;
     }
 
-    if(node->type == Number)
+    if(node->type == Number || node->type == MagicNums)
     {
         return CreateNum(0);
     }
@@ -62,11 +63,45 @@ NodeStruct* Differentiator(NodeStruct* node)
             NodeStruct* dL = Differentiator(node->Left);
             NodeStruct* dR = Differentiator(node->Right);
 
-            NodeStruct* cL = CopyNode(node->Left);
-            NodeStruct* cR = CopyNode(node->Right);
+            NodeStruct* cL  = CopyNode(node->Left);
+            NodeStruct* cR  = CopyNode(node->Right);
+            NodeStruct* cR1 = CopyNode(node->Right);
+            NodeStruct* cR2 = CopyNode(node->Right);
 
-            
+            return CreateOp(divis, CreateOp(subtr, CreateOp(mul, dL, cR), CreateOp(mul, cL, dR)), CreateOp(mul, cR1, cR2));
+
+            break;
         }
+
+        // case inv:
+        // {
+            
+        // }
+
+        case op_log:
+            {
+                if(node->Left->type == MagicNums && node->Left->value == mg_e)
+                {
+                    NodeStruct* cR = CopyNode(node->Right);
+
+                    return CreateOp(divis, Differentiator(cR), node->Right);
+                }
+                else
+                {
+                    NodeStruct* cL = CopyNode(node->Left);
+                    NodeStruct* cR = CopyNode(node->Right);
+
+                    NodeStruct* val = CreateOp(divis, CreateOp(op_log, CreateMagicNum(mg_e), cR), CreateOp(op_log, CreateMagicNum(mg_e), cL));
+
+                    // GraphicDump(val);
+
+                    // exit(0);
+
+                    return Differentiator(val);
+                }
+
+                break;
+            }
 
         default:
         {

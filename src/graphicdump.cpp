@@ -16,7 +16,7 @@ struct ArrowStruct
 
 struct GraphicStruct
 {
-    ArrowStruct ArrowArray[60];
+    ArrowStruct ArrowArray[300];
     size_t ArrowsQuantity;
 };
 
@@ -47,7 +47,7 @@ int GraphicDump(NodeStruct* Root)
     {
         for(size_t CurrentArrow = 0; CurrentArrow < Arrows.ArrowsQuantity; CurrentArrow++)
             {
-                fprintf(dumppicture, "\"%p\"->\"%p\"", Arrows.ArrowArray[CurrentArrow].ParentName, Arrows.ArrowArray[CurrentArrow].ChildName);
+                fprintf(dumppicture, "\"%p\"->\"%p\"\n", Arrows.ArrowArray[CurrentArrow].ParentName, Arrows.ArrowArray[CurrentArrow].ChildName);
             }
     }
     else
@@ -114,6 +114,20 @@ static int GraphicBypass(NodeStruct* node, GraphicStruct* Arrows, FILE* dumppict
 
                     break;
                 }
+
+            case inv:
+                {
+                    fprintf(dumppicture, "\"%p\" [color=red,label = \"{%p | Operation | ^ | {%p | %p}}\" ];\n", node, node, node->Left, node->Right);
+
+                    break;
+                }
+
+            case op_log:
+                {
+                    fprintf(dumppicture, "\"%p\" [color=red,label = \"{%p | Operation | log | {%p | %p}}\" ];\n", node, node, node->Left, node->Right);
+
+                    break;
+                }
             
             default:
                 {
@@ -138,6 +152,31 @@ static int GraphicBypass(NodeStruct* node, GraphicStruct* Arrows, FILE* dumppict
 
             default:
                 printf("eeee nu chot ne ponyatno s variable\n");
+                break;
+            }
+
+            break;
+        }
+
+    case MagicNums:
+        {
+            switch (node->value)
+            {
+            case mg_pi:
+                {
+                    fprintf(dumppicture, "\"%p\" [color=yellow,label = \"{%p | Magic Num | pi | {%p | %p}}\" ];\n", node, node, node->Left, node->Right);
+
+                    break;
+                }
+            
+            case mg_e:
+                {
+                    fprintf(dumppicture, "\"%p\" [color=yellow,label = \"{%p | Magic Num | e | {%p | %p}}\" ];\n", node, node, node->Left, node->Right);
+
+                    break;
+                }
+
+            default:
                 break;
             }
 

@@ -7,6 +7,8 @@
 
 #include "createnode.h"
 
+static NodeStruct* CopyBypass(NodeStruct* node);
+
 NodeStruct* CreateNode(int type, int value, NodeStruct* Left, NodeStruct* Right)
 {
     NodeStruct* node  = (NodeStruct*) calloc(1, sizeof(NodeStruct));
@@ -32,6 +34,18 @@ NodeStruct* CopyNode(NodeStruct* node)
         return nullptr;
     }
 
+    return CopyBypass(node);
+}
+
+static NodeStruct* CopyBypass(NodeStruct* node)
+{
+    if(!node)
+    {
+        printf("Trouble with pointer in copybypass\n");
+
+        return nullptr;
+    }
+
     NodeStruct* CopyofNode = (NodeStruct*) calloc(1, sizeof(NodeStruct));
     if(!CopyofNode)
     {
@@ -39,11 +53,17 @@ NodeStruct* CopyNode(NodeStruct* node)
         return nullptr;
     }
 
-    CopyofNode->Left = node->Left;
-    CopyofNode->Right = node->Right;
     CopyofNode->type = node->type;
     CopyofNode->value = node->value;
-    CopyofNode->Parent = node->Parent;
+
+    if(node->Left)
+    {
+        CopyofNode->Left = CopyBypass(node->Left);
+    }
+    if(node->Right)
+    {
+        CopyofNode->Right = CopyBypass(node->Right);
+    }
 
     return CopyofNode;
 }

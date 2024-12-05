@@ -9,6 +9,7 @@
 #include "createnode.h"
 #include "read.h"
 #include "difer.h"
+#include "optimization.h"
 
 int main()
 {
@@ -24,9 +25,13 @@ int main()
 
      GraphicDump(Root);
 
+     // Optimizations(Root);
+
+     // GraphicDump(Root);
+
      printf("Your equation was read\nYou want to take the derevativ[y/n]?\n");
 
-     char Answer [1] = {};
+     char Answer[1] = {};
 
      scanf("%s", Answer);
 
@@ -35,6 +40,17 @@ int main()
           Root = Differentiator(Root);
 
           GraphicDump(Root);
+
+          char Answer2 [1] = {};
+
+          printf("Do you like what you see[y/n]?\n");
+
+          scanf("%s", Answer2);
+
+          if(Answer2[0] == 'n')
+          {
+               Optimizations(Root);
+          }
      }
 
      return 0;
