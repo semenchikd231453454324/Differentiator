@@ -10,6 +10,7 @@
 #include "read.h"
 #include "difer.h"
 #include "optimization.h"
+#include "print.h"
 
 int main()
 {
@@ -40,18 +41,20 @@ int main()
           Root = Differentiator(Root);
 
           GraphicDump(Root);
-
-          char Answer2 [1] = {};
-
-          printf("Do you like what you see[y/n]?\n");
-
-          scanf("%s", Answer2);
-
-          if(Answer2[0] == 'n')
-          {
-               Optimizations(Root);
-          }
      }
+
+     char Answer2 [1] = {};
+
+     printf("Do you like what you see[y/n]?\n");
+
+     scanf("%s", Answer2);
+
+     if(Answer2[0] == 'n')
+     {
+          Optimizations(Root);
+     }
+
+     print(Root);
 
      return 0;
 }

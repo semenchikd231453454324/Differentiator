@@ -16,7 +16,7 @@ struct ArrowStruct
 
 struct GraphicStruct
 {
-    ArrowStruct ArrowArray[300];
+    ArrowStruct ArrowArray[10000];
     size_t ArrowsQuantity;
 };
 

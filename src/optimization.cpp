@@ -51,6 +51,13 @@ int Optimizations(NodeStruct* Root)
 
         //printf("temp1 = %d\n", temp);
 
+    //     GraphicDump(Root);
+
+    // char a[1] = {};
+
+    // scanf("%s\n", a);
+
+
     }
 
     GraphicDump(Root);
@@ -69,6 +76,30 @@ int ConstantFolding(NodeStruct* node)
         case REPLACE(mul, *)
         case REPLACE(divis, /)
         
+        case inv:
+            {
+                node->type = Number;
+
+                int tempval = node->Left->value;
+
+                for(int i = 0; i < node->Right->value - 1; i++)
+                {
+                    tempval *= node->Left->value;
+                }
+
+                node->value = tempval;
+
+                free(node->Left);
+                free(node->Right);
+
+                node->Left = nullptr;
+                node->Right = nullptr;
+
+                return 1;
+
+                break;
+            }
+
         default:
             printf("Unknown operation in folding\n");
             break;
@@ -97,6 +128,12 @@ int ConstantFolding(NodeStruct* node)
 
 int TrivialOperations(NodeStruct** node)
 {
+    // GraphicDump(*node);
+
+    // char a[1] = {};
+
+    // scanf("%s\n", a);
+
     if((*node)->type == Operation)
     {
         switch ((*node)->value)
@@ -111,7 +148,7 @@ int TrivialOperations(NodeStruct** node)
                 }
                 if((*node)->Right->type == Number && (*node)->Right->value == 0)
                 {
-                    (*node) = (*node)->Right;
+                    (*node) = (*node)->Left;
 
                     return 1;
                 }
@@ -191,26 +228,70 @@ int TrivialOperations(NodeStruct** node)
                 break;
             }
 
+        case inv:
+        {   
+            if((*node)->Right->type == Number && (*node)->Right->value == 0)
+            {
+                (*node)->type = Number;
+                (*node)->value = 1;
+
+                free((*node)->Left);
+                free((*node)->Right);
+
+                (*node)->Left = nullptr;
+                (*node)->Right = nullptr;
+
+                return 1;
+            }
+            else
+            {
+                if((*node)->Left->type == Number && (*node)->Left->value == 1)
+                {
+                    (*node)->type = Number;
+                    (*node)->value = 1;
+
+                    free((*node)->Left);
+                    free((*node)->Right);
+
+                    (*node)->Left = nullptr;
+                    (*node)->Right = nullptr;
+
+                    return 1;
+                }
+                if((*node)->Right->type == Number && (*node)->Right->value == 1)
+                {
+                    (*node) = (*node)->Left;
+
+                    return 1;
+                }
+            }
+
+            break;
+        }   
         
         default:
             break;
         }
     }
 
+    int val = 0;
+
     if((*node)->Left)
     {
         if((*node)->Left->type == Operation)
         {
-            return TrivialOperations(&((*node)->Left));
+            val += TrivialOperations(&((*node)->Left));
         }
     }
+
+
     if((*node)->Right)
     {
         if((*node)->Right->type == Operation)
         {
-            return TrivialOperations(&((*node)->Right));
+            val += TrivialOperations(&((*node)->Right));
         }
     }
 
-    return 0;
+    return val;
 }

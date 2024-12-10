@@ -73,10 +73,19 @@ NodeStruct* Differentiator(NodeStruct* node)
             break;
         }
 
-        // case inv:
-        // {
-            
-        // }
+        case inv:
+        {
+            if(node->Left->type == MagicNums && node->Left->value == mg_e)
+            {
+                NodeStruct* cR = CopyNode(node->Right);
+
+                return CreateOp(mul, CreateOp(inv, CreateMagicNum(mg_e), node->Right), Differentiator(cR));
+            }
+
+            return Differentiator(CreateOp(inv, CreateMagicNum(mg_e), CreateOp(mul, CreateOp(op_log, CreateMagicNum(mg_e), node->Left), node->Right)));
+
+            break;
+        }
 
         case op_log:
             {
@@ -92,10 +101,6 @@ NodeStruct* Differentiator(NodeStruct* node)
                     NodeStruct* cR = CopyNode(node->Right);
 
                     NodeStruct* val = CreateOp(divis, CreateOp(op_log, CreateMagicNum(mg_e), cR), CreateOp(op_log, CreateMagicNum(mg_e), cL));
-
-                    // GraphicDump(val);
-
-                    // exit(0);
 
                     return Differentiator(val);
                 }
